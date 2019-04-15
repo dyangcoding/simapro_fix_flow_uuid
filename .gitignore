@@ -1,0 +1,10 @@
+# vs code settings
+.vscode/
+
+#exclue source file
+simapro/
+post_processing_fixFlowUUIDS_4SimaANDGabi.xlsx
+
+#exclue output
+simapro_output_20190415
+mapped_flow_uuid.csv
