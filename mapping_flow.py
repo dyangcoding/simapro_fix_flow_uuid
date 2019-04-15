@@ -55,9 +55,10 @@ def iter_files():
 def check_mapping(file_path: str, mapping: dict):
     """
     iterate through all generated xlsx files and check if there 
-    are process with referenced flow which has wrong uuid
+    are processes with referenced flow which have wrong uuid
 
     format of original file has been changed after modify
+    do not use this method if format should be preserved
     """
     wb = load_workbook(file_path)
     print('load file {}'.format(file_path))
@@ -85,7 +86,7 @@ def check_mapping(file_path: str, mapping: dict):
                 flow_section = True
     wb.save(file_path)
 
-def get_xls_files():
+def get_xls_files() -> str:
     for root, _, files in os.walk('simapro'):
         for f in files:
             yield os.path.abspath(os.path.join(root, f))
@@ -94,19 +95,23 @@ def iter():
     mapped_data = []
     mapping = get_mapping()
     for path in get_xls_files():
+        # use raw string more see docs
         file_path = r'%s' % path
         print('read process uuids from file {}'.format(file_path))
         check_mapping_xw(path, mapping, mapped_data)
     write_csv(mapped_data)
 
 def write_csv(data: list):
-    with open('mapped_flow_uuid.csv', mode='w', newline='') as f:
+    with open('mapped_flow_uuid_model_beer.csv', mode='w', newline='') as f:
         writer = csv.writer(f, delimiter = ',')
         writer.writerow(['File', 'Sheet', 'Process', 'Old flow', 'New Flow'])
         for d in data:
             writer.writerow([d.file, d.sheet, d.process, d.old_flow, d.new_flow])
 
 def check_mapping_xw(file_path: str, mapping: dict, mapped_data: list):
+    """
+    modify excel file without changing existing format
+    """
     wb = xw.Book(file_path)
     app = xw.apps.active
     print('load file {}'.format(file_path))

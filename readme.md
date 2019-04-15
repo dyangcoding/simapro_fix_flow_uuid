@@ -1,3 +1,5 @@
+# source and output data are not inclued in this repo
+
 1 a random uuid for flow was created for simapro model within OpenLCA,
 which cause the problem that flow referenced by process doesn't correspond
 to the right flow with the correct uuid.
